@@ -1,0 +1,1 @@
+# fotosoc-newsletter-generator
