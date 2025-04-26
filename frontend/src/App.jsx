@@ -8,6 +8,7 @@ import {
   CreateLink,
   InsertImage,
   ListsToggle,
+  StrikeThroughSupSubToggles,
 } from "@mdxeditor/editor";
 import {
   headingsPlugin,
@@ -71,7 +72,7 @@ BE THERE
 `);
 
 const [title, setTitle] = useState("AND IF THE ELEVATOR TRIES TO BRING US DOWN");
-const [writtenBy, setWrittenBy] = useState("Written by Jake Farrell - Fotosoc Webmaster 2025-2026");
+const [writtenBy, setWrittenBy] = useState("Written by Pelé Ashley - Fotosoc Secretary 2024/25");
 
 const handleMarkdownChange = (newMarkdown) => {
   setMarkdown(newMarkdown);
@@ -328,11 +329,12 @@ const generateNewsletterHTML = () => {
                 toolbarContents: () => (
                   <>
                     <UndoRedo />
-                    <BoldItalicUnderlineToggles />
                     <BlockTypeSelect />
+                    <BoldItalicUnderlineToggles />
+                    <StrikeThroughSupSubToggles />
+                    <ListsToggle />
                     <CreateLink />
                     <InsertImage />
-                    <ListsToggle />
                   </>
                 ),
               }),
