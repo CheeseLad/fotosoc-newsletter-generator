@@ -123,6 +123,7 @@ BE THERE
       <select onChange={(e) => setTemplate(e.target.value)} value={template}>
         <option value="fotosoc">DCU Fotosoc</option>
         <option value="mps">DCU MPS</option>
+        <option value="redbrick">Redbrick</option>
       </select>
 
         <div style={{ marginBottom: "16px" }}>
