@@ -21,7 +21,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 
-import { marked } from "marked";
+import generateNewsletterHTML from "./components/generateNewsletterHTML";
 
 async function imageUploadHandler(image) {
   const formData = new FormData();
@@ -79,167 +79,16 @@ BE THERE
   const [sendPassword, setSendPassword] = useState("");
   const [sendingStatus, setSendingStatus] = useState("");
 
+  const [template, setTemplate] = useState("fotosoc");
+
   const handleMarkdownChange = (newMarkdown) => {
     setMarkdown(newMarkdown);
+
   };
 
-  const generateNewsletterHTML = () => {
-    const styledContent = `
-    <div class="user-content" style="color: #000000; text-align: center;">
-      ${marked.parse(markdown)}
-    </div>
-  `;
-
-    return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>DCU Fotosoc Newsletter</title>
-      <style>
-        .user-content img {
-          width: 300px;
-          height: 300px;
-          object-fit: cover;
-          border-radius: 8px;
-          display: block;
-          margin: 16px auto;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-      </style>
-    </head>
-    <body style="margin:0;padding:0;background-color:#1e40af;font-family:Arial,sans-serif;color:white;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(to right, #1e3a8a, #2563eb);">
-        <tr>
-          <td align="center" style="padding: 16px;">
-            
-            <!-- Header Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; padding: 32px 16px 16px 16px; margin-bottom: 24px;">
-              <tr>
-                <td align="center" style="padding-bottom: 16px;">
-                  <table cellpadding="0" cellspacing="0" border="0" style="margin: auto;">
-                    <tr>
-                      <td align="center" style="padding-right: 16px;">
-                        <img src="https://i.imgur.com/2hiweJS.png" alt="DCU Fotosoc Logo"
-                          style="width: 128px; height: 128px; display: block;">
-                      </td>
-                      <td align="center">
-                        <h2 style="font-size: 48px; font-weight: bold; color: #000000; margin: 0;">DCU Fotosoc</h2>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <td align="center">
-                  <i style="font-size: 24px; color: #000000;">${title}</i>
-                </td>
-              </tr>
-            </table>
-
-            <!-- Weekly Recap Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-              <tr>
-                <td style="padding: 16px; text-align: center;">
-                  ${styledContent}
-                </td>
-              </tr>
-            </table>
-
-            <!-- Author Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; margin-bottom: 24px;">
-              <tr>
-                <td style="padding: 16px; text-align: center;">
-                  <p style="font-size: 16px; color: #000000; margin: 0 0 8px;">
-                    ${writtenBy}
-                  </p> 
-                </td>
-              </tr>
-            </table>
-
-            <!-- Socials Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0"
-              style="background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-              <tr>
-                <td style="padding: 16px; text-align: center;">
-                  <h3
-                    style="font-size: 18px; font-weight: bold; color: #1e40af; margin: 0 0 16px;">Check
-                    Out Our Socials!</h3>
-                  <table cellpadding="0" cellspacing="0" border="0"
-                    style="margin: auto;">
-                    <tr>
-                      <td style="padding: 8px;">
-                        <a href="https://chat.whatsapp.com/KcWm0mU78nyHKMibl3Vlko"
-                          target="_blank" style="text-decoration: none;">
-                          <img src="https://i.imgur.com/zzymrYn.png" alt="WhatsApp"
-                            style="width: 48px; height: 48px;">
-                        </a>
-                      </td>
-                      <td style="padding: 8px;">
-                        <a href="https://www.tiktok.com/@dcufotosoc"
-                          target="_blank" style="text-decoration: none;">
-                          <img src="https://i.imgur.com/D5mnYPb.png" alt="TikTok"
-                            style="width: 48px; height: 48px;">
-                        </a>
-                      </td>
-                      <td style="padding: 8px;">
-                        <a href="https://instagram.com/dcufotosoc" target="_blank"
-                          style="text-decoration: none;">
-                          <img src="https://i.imgur.com/w7DUF2P.png" alt="Instagram"
-                            style="width: 48px; height: 48px;">
-                        </a>
-                      </td>
-                      <td style="padding: 8px;">
-                        <a href="mailto:committee@dcufotosoc.ie" target="_blank"
-                          style="text-decoration: none;">
-                          <img src="https://i.imgur.com/ssNBtrm.png" alt="Email"
-                            style="width: 48px; height: 48px;">
-                        </a>
-                      </td>
-                      <td style="padding: 8px;">
-                        <a href="https://dcufotosoc.ie" target="_blank"
-                          style="text-decoration: none;">
-                          <img src="https://i.imgur.com/XCberko.png" alt="Website"
-                            style="width: 48px; height: 48px;">
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-
-            <!-- Footer Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0"
-              style="background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-              <tr>
-                <td style="padding: 16px; text-align: center;">
-                  <p style="font-size: 16px; color: #000000; margin: 0 0 24px;">
-                    DCU Fotosoc © 2003 - 2025. Newsletter Generator by
-                    <a href="https://www.jakefarrell.ie/" target="_blank"
-                      style="color: #1e40af; text-decoration: none;">Jake
-                      Farrell</a>
-                  </p>
-                  <i style="color: #000000;">If you would like to stop receiving
-                    these emails, please contact
-                    <a href="mailto:secretary@dcufotosoc.ie"
-                      style="color: #1e40af; text-decoration: none;">secretary@dcufotosoc.ie</a>
-                    to unsubscribe.
-                  </i>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
-  `;
-  };
 
   const downloadHTML = () => {
-    const htmlContent = generateNewsletterHTML();
+    const htmlContent = generateNewsletterHTML(markdown, title, writtenBy, template);
     const blob = new Blob([htmlContent], { type: "text/html" });
     const url = URL.createObjectURL(blob);
 
@@ -252,7 +101,7 @@ BE THERE
   };
 
   const copyHTMLToClipboard = async () => {
-    const htmlContent = generateNewsletterHTML();
+    const htmlContent = generateNewsletterHTML(markdown, title, writtenBy, template);
     try {
       await navigator.clipboard.writeText(htmlContent);
       alert("HTML copied to clipboard! 🚀");
@@ -271,6 +120,11 @@ BE THERE
           backgroundColor: "#f8fafc",
         }}
       >
+      <select onChange={(e) => setTemplate(e.target.value)} value={template}>
+        <option value="fotosoc">DCU Fotosoc</option>
+        <option value="mps">DCU MPS</option>
+      </select>
+
         <div style={{ marginBottom: "16px" }}>
           <label>Title</label>
           <input
@@ -517,7 +371,7 @@ BE THERE
       >
         <iframe
           title="Newsletter Preview"
-          srcDoc={generateNewsletterHTML()}
+          srcDoc={generateNewsletterHTML(markdown, title, writtenBy, template)}
           style={{
             width: "100%",
             height: "90vh",
