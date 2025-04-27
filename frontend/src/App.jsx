@@ -27,23 +27,19 @@ async function imageUploadHandler(image) {
   const formData = new FormData();
   formData.append("image", image);
 
-  const response = await fetch("https://api.imgur.com/3/image", {
+  const response = await fetch("http://127.0.0.1:3001/upload-image", {
     method: "POST",
-    headers: {
-      Authorization: `Client-ID ${import.meta.env.VITE_IMGUR_CLIENT_ID}`,
-    },
     body: formData,
   });
 
   const json = await response.json();
 
   if (!json.success) {
-    throw new Error("Image upload failed");
+    throw new Error("Image upload failed: " + json.error);
   }
 
-  return json.data.link;
+  return json.link;
 }
-
 
 function App() {
   const [markdown, setMarkdown] = useState(`
@@ -71,25 +67,36 @@ BE THERE
 
 `);
 
-const [title, setTitle] = useState("AND IF THE ELEVATOR TRIES TO BRING US DOWN");
-const [writtenBy, setWrittenBy] = useState("Written by Pelé Ashley - Fotosoc Secretary 2024/25");
+  const [title, setTitle] = useState(
+    "AND IF THE ELEVATOR TRIES TO BRING US DOWN"
+  );
+  const [writtenBy, setWrittenBy] = useState(
+    "Written by Pelé Ashley - Fotosoc Secretary 2024/25"
+  );
+  const [emailList, setEmailList] = useState([]);
+  const [csvFile, setCsvFile] = useState(null);
+  const [csvUploadError, setCsvUploadError] = useState("");
+  const [sendPassword, setSendPassword] = useState("");
+  const [sendingStatus, setSendingStatus] = useState("");
 
-const handleMarkdownChange = (newMarkdown) => {
-  setMarkdown(newMarkdown);
-};
+  const handleMarkdownChange = (newMarkdown) => {
+    setMarkdown(newMarkdown);
+  };
 
-const generateNewsletterHTML = () => {
-  const styledContent = `
+  const generateNewsletterHTML = () => {
+    const styledContent = `
     <div class="user-content" style="color: #000000; text-align: center;">
       ${marked.parse(markdown)}
     </div>
   `;
 
-  return `
+    return `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>DCU Fotosoc Newsletter</title>
       <style>
         .user-content img {
           width: 300px;
@@ -254,10 +261,16 @@ const generateNewsletterHTML = () => {
     }
   };
 
-
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <div style={{ width: "50%", padding: "24px", overflowY: "scroll", backgroundColor: "#f8fafc" }}>
+    <div style={{ display: "flex", height: "95vh", }}>
+      <div
+        style={{
+          width: "50%",
+          padding: "24px",
+          overflowY: "scroll",
+          backgroundColor: "#f8fafc",
+        }}
+      >
         <div style={{ marginBottom: "16px" }}>
           <label>Title</label>
           <input
@@ -306,7 +319,158 @@ const generateNewsletterHTML = () => {
             </button>
           </div>
         </div>
-        
+
+        <div style={{ marginBottom: "16px" }}>
+          <label>Upload Member Emails <br></br><i>Get the file <a href="https://cp.dcuclubsandsocs.ie/members/export/all" target="_blank">here</a></i> </label>
+          <br></br>
+          <input
+            type="file"
+            accept=".csv"
+            onChange={(e) => setCsvFile(e.target.files[0])}
+            style={{ marginBottom: "8px" }}
+          />
+          <button
+            onClick={async () => {
+              if (!csvFile) return;
+              const formData = new FormData();
+              formData.append("csv", csvFile);
+
+              try {
+                const response = await fetch(
+                  "http://127.0.0.1:3001/upload-csv",
+                  {
+                    method: "POST",
+                    body: formData,
+                  }
+                );
+
+                const result = await response.json();
+                if (response.ok) {
+                  setEmailList(result.emails);
+                  setCsvUploadError("");
+                } else {
+                  setCsvUploadError(result.error || "Failed to upload CSV");
+                }
+              } catch (error) {
+                console.error("Error uploading CSV:", error);
+                setCsvUploadError("Something went wrong");
+              }
+            }}
+            style={{
+              backgroundColor: "#1e40af",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              marginTop: "8px",
+            }}
+          >
+            Upload CSV
+          </button>
+
+          {csvUploadError && (
+            <div style={{ color: "red", marginTop: "8px" }}>
+              {csvUploadError}
+            </div>
+          )}
+        </div>
+
+        {emailList.length > 0 && (
+          <div
+            style={{
+              marginTop: "16px",
+              backgroundColor: "#ffffff",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "8px",
+              maxHeight: "200px",
+              overflowY: "scroll",
+            }}
+          >
+            <strong>Emails ({emailList.length}):</strong>
+            <ul
+              style={{ listStyleType: "none", padding: "0", margin: "8px 0" }}
+            >
+              {emailList.map((email, index) => (
+                <li key={index} style={{ fontSize: "14px", padding: "2px 0" }}>
+                  {email}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div style={{ marginTop: "24px" }}>
+          <label>Send Password</label>
+          <input
+            type="password"
+            value={sendPassword}
+            onChange={(e) => setSendPassword(e.target.value)}
+            placeholder="Enter password"
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginBottom: "8px",
+              marginTop: "4px",
+            }}
+          />
+
+          <button
+            onClick={async () => {
+              setSendingStatus("Sending...");
+              try {
+                const response = await fetch(
+                  "http://127.0.0.1:3001/send-emails",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      password: sendPassword,
+                      emails: emailList,
+                      newsletterHtml: generateNewsletterHTML(),
+                    }),
+                  }
+                );
+
+                const result = await response.json();
+                if (response.ok) {
+                  setSendingStatus("✅ Emails sent successfully!");
+                } else {
+                  setSendingStatus(`❌ Error: ${result.error}`);
+                }
+              } catch (error) {
+                console.error(error);
+                setSendingStatus("❌ Failed to send emails.");
+              }
+            }}
+            style={{
+              backgroundColor: "#1e40af",
+              color: "white",
+              border: "none",
+              padding: "12px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              width: "100%",
+              marginTop: "8px",
+              marginBottom: "8px",
+            }}
+          >
+            Send Emails
+          </button>
+
+          {sendingStatus && (
+            <div
+              style={{
+                marginTop: "8px",
+                color: sendingStatus.includes("❌") ? "red" : "green",
+              }}
+            >
+              {sendingStatus}
+            </div>
+          )}
+        </div>
+
         <div className="editor-content">
           <MDXEditor
             markdown={markdown}
@@ -325,7 +489,7 @@ const generateNewsletterHTML = () => {
                 ],
               }),
               toolbarPlugin({
-                toolbarClassName: "my-classname",
+                toolbarClassName: "toolbar",
                 toolbarContents: () => (
                   <>
                     <UndoRedo />
@@ -341,14 +505,25 @@ const generateNewsletterHTML = () => {
             ]}
           />
         </div>
-
       </div>
-      <div style={{ width: "50%", padding: "24px", backgroundColor: "#f1f5f9", overflowY: "scroll" }}>
-        <h2>Preview:</h2>
+      <div
+        style={{
+          width: "50%",
+          padding: "24px",
+          backgroundColor: "#f1f5f9",
+          overflowY: "hidden",
+          overflowX: "hidden",
+        }}
+      >
         <iframe
           title="Newsletter Preview"
           srcDoc={generateNewsletterHTML()}
-          style={{ width: "100%", height: "90vh", border: "1px solid #ccc", backgroundColor: "white" }}
+          style={{
+            width: "100%",
+            height: "90vh",
+            border: "1px solid #ccc",
+            backgroundColor: "white",
+          }}
         />
       </div>
     </div>
