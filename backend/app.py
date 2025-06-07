@@ -20,6 +20,8 @@ SMTP_USERNAME = os.getenv('SMTP_USERNAME')
 SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 SMTP_SECURE = os.getenv('SMTP_SECURE') == 'true'
 
+APP_PORT = int(os.getenv('APP_PORT') or 3001)
+
 IMGUR_CLIENT_ID = os.getenv('IMGUR_CLIENT_ID')
 
 # Upload CSV and return email list
@@ -49,7 +51,6 @@ def upload_csv():
     return jsonify({'emails': emails})
 
 
-# 📧 Send Emails Route
 @app.route('/send-emails', methods=['POST'])
 def send_emails():
     data = request.get_json()
@@ -58,14 +59,19 @@ def send_emails():
         return jsonify({"success": False, "error": "Invalid data"}), 400
 
     password = data.get('password')
+    author = data.get('author', "DCU Fotosoc")
+    subject = data.get('subject', "DCU Fotosoc Newsletter")
     email_list = data.get('emails', [])
     newsletter_html = data.get('newsletterHtml', "")
 
     if password != SEND_PASSWORD:
         return jsonify({"success": False, "error": "Incorrect password"}), 403
 
-    if not email_list or not newsletter_html:
-        return jsonify({"success": False, "error": "Missing emails or content"}), 400
+    if not email_list:
+        return jsonify({"success": False, "error": "Missing emails"}), 400
+    
+    if not newsletter_html:
+        return jsonify({"success": False, "error": "Missing content"}), 400
 
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -74,8 +80,8 @@ def send_emails():
 
         for email in email_list:
             msg = MIMEText(newsletter_html, 'html')
-            msg['Subject'] = "DCU Fotosoc Newsletter ✨"
-            msg['From'] = SMTP_USERNAME
+            msg['Subject'] = subject
+            msg['From'] = author.split('-')[0].strip()
             msg['To'] = email
 
             server.sendmail(SMTP_USERNAME, email, msg.as_string())
@@ -87,10 +93,6 @@ def send_emails():
     except Exception as e:
         print("Email sending failed:", str(e))
         return jsonify({"success": False, "error": str(e)}), 500
-
-
-# Proxy Imgur image upload (optional)
-
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
@@ -117,4 +119,4 @@ def upload_image():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3001, debug=True)
+    app.run(host='0.0.0.0', port=APP_PORT, debug=True)

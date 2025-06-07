@@ -28,6 +28,9 @@ ENV SMTP_SECURE=$SMTP_SECURE
 ARG IMGUR_CLIENT_ID
 ENV IMGUR_CLIENT_ID=$IMGUR_CLIENT_ID
 
+ARG APP_PORT
+ENV APP_PORT=$APP_PORT
+
 RUN pip install --upgrade pip
 
 RUN pip install --no-cache-dir -r requirements.txt

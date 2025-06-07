@@ -83,12 +83,15 @@ BE THERE
 
   const handleMarkdownChange = (newMarkdown) => {
     setMarkdown(newMarkdown);
-
   };
 
-
   const downloadHTML = () => {
-    const htmlContent = generateNewsletterHTML(markdown, subject, author, template);
+    const htmlContent = generateNewsletterHTML(
+      markdown,
+      subject,
+      author,
+      template
+    );
     const blob = new Blob([htmlContent], { type: "text/html" });
     const url = URL.createObjectURL(blob);
 
@@ -101,7 +104,12 @@ BE THERE
   };
 
   const copyHTMLToClipboard = async () => {
-    const htmlContent = generateNewsletterHTML(markdown, subject, author, template);
+    const htmlContent = generateNewsletterHTML(
+      markdown,
+      subject,
+      author,
+      template
+    );
     try {
       await navigator.clipboard.writeText(htmlContent);
       alert("HTML copied to clipboard! 🚀");
@@ -111,7 +119,7 @@ BE THERE
   };
 
   return (
-    <div style={{ display: "flex", height: "95vh", }}>
+    <div style={{ display: "flex", height: "95vh" }}>
       <div
         style={{
           width: "50%",
@@ -120,7 +128,7 @@ BE THERE
           backgroundColor: "#f8fafc",
         }}
       >
-      {/*<select onChange={(e) => setTemplate(e.target.value)} value={template}>
+        {/*<select onChange={(e) => setTemplate(e.target.value)} value={template}>
         <option value="fotosoc">DCU Fotosoc</option>
         <option value="mps">DCU MPS</option>
         <option value="redbrick">Redbrick</option>
@@ -176,19 +184,30 @@ BE THERE
         </div>
 
         <div style={{ marginBottom: "16px" }}>
-          <label>Upload Member Emails <br></br><i>Get the file <a href="https://cp.dcuclubsandsocs.ie/members/export/all" target="_blank">here</a></i> </label>
+          <label>
+            Upload Member Emails <br></br>
+            <i>
+              Get the file{" "}
+              <a
+                href="https://cp.dcuclubsandsocs.ie/members/export/all"
+                target="_blank"
+              >
+                here
+              </a>
+            </i>{" "}
+          </label>
           <br></br>
           <input
             type="file"
             accept=".csv"
-            onChange={(e) => setCsvFile(e.target.files[0])}
-            style={{ marginBottom: "8px" }}
-          />
-          <button
-            onClick={async () => {
-              if (!csvFile) return;
+            onChange={async (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+
+              setCsvFile(file); // Optional: if you still want to track it in state
+
               const formData = new FormData();
-              formData.append("csv", csvFile);
+              formData.append("csv", file);
 
               try {
                 const response = await fetch(
@@ -211,18 +230,8 @@ BE THERE
                 setCsvUploadError("Something went wrong");
               }
             }}
-            style={{
-              backgroundColor: "#1e40af",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              marginTop: "8px",
-            }}
-          >
-            Upload CSV
-          </button>
+            style={{ marginBottom: "8px" }}
+          />
 
           {csvUploadError && (
             <div style={{ color: "red", marginTop: "8px" }}>
@@ -282,8 +291,15 @@ BE THERE
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       password: sendPassword,
+                      author: author,
+                      subject: subject,
                       emails: emailList,
-                      newsletterHtml: generateNewsletterHTML(),
+                      newsletterHtml: generateNewsletterHTML(
+                        markdown,
+                        subject,
+                        author,
+                        template
+                      ),
                     }),
                   }
                 );

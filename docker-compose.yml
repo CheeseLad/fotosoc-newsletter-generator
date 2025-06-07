@@ -15,6 +15,7 @@ services:
       - SMTP_PASSWORD=$SMTP_PASSWORD
       - SMTP_SECURE=$SMTP_SECURE
       - IMGUR_CLIENT_ID=$IMGUR_CLIENT_ID
+      - APP_PORT=$APP_PORT
 
   fotosoc-newsletter-generator-frontend:
     build:
