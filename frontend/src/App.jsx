@@ -164,7 +164,7 @@ BE THERE
                 cursor: "pointer",
               }}
             >
-              Download HTML
+              Download Email HTML
             </button>
             <button
               onClick={copyHTMLToClipboard}
@@ -178,23 +178,23 @@ BE THERE
                 cursor: "pointer",
               }}
             >
-              Copy to Clipboard
+              Copy Email HTML to Clipboard
             </button>
           </div>
         </div>
 
         <div style={{ marginBottom: "16px" }}>
           <label>
-            Upload Member Emails <br></br>
+            Upload Society Member Email List CSV{" "}
             <i>
-              Get the file{" "}
+              (Get the file{" "}
               <a
                 href="https://cp.dcuclubsandsocs.ie/members/export/all"
                 target="_blank"
               >
                 here
               </a>
-            </i>{" "}
+            </i>){" "}
           </label>
           <br></br>
           <input
@@ -230,7 +230,7 @@ BE THERE
                 setCsvUploadError("Something went wrong");
               }
             }}
-            style={{ marginBottom: "8px" }}
+            style={{ marginBottom: "8px", marginTop: "4px" }}
           />
 
           {csvUploadError && (
@@ -334,6 +334,7 @@ BE THERE
             <div
               style={{
                 marginTop: "8px",
+                marginBottom: "8px",
                 color: sendingStatus.includes("❌") ? "red" : "green",
               }}
             >

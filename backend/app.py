@@ -60,6 +60,11 @@ def send_emails():
 
     password = data.get('password')
     author = data.get('author', "DCU Fotosoc")
+    try:
+        author_name = author.split('-')[0].strip()
+    except Exception as e:
+        return jsonify({"success": False, "error": "Invalid author format"}), 400
+    
     subject = data.get('subject', "DCU Fotosoc Newsletter")
     email_list = data.get('emails', [])
     newsletter_html = data.get('newsletterHtml', "")
@@ -75,15 +80,18 @@ def send_emails():
 
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
+        if SMTP_SECURE:
+            server.ehlo()
+            server.starttls()
         server.login(SMTP_USERNAME, SMTP_PASSWORD)
 
         for email in email_list:
             msg = MIMEText(newsletter_html, 'html')
             msg['Subject'] = subject
-            msg['From'] = author.split('-')[0].strip()
+            msg['From'] = author_name
             msg['To'] = email
 
+            print(f"Sending email to {email} from {author_name} with subject: {subject}")
             server.sendmail(SMTP_USERNAME, email, msg.as_string())
 
         server.quit()
