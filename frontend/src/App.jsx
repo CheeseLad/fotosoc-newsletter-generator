@@ -67,11 +67,11 @@ BE THERE
 
 `);
 
-  const [title, setTitle] = useState(
+  const [subject, setSubject] = useState(
     "AND IF THE ELEVATOR TRIES TO BRING US DOWN"
   );
-  const [writtenBy, setWrittenBy] = useState(
-    "Written by Pelé Ashley - Fotosoc Secretary 2024/25"
+  const [author, setAuthor] = useState(
+    "Conor Purcell - DCU Fotosoc Secretary 2025/26"
   );
   const [emailList, setEmailList] = useState([]);
   const [csvFile, setCsvFile] = useState(null);
@@ -88,7 +88,7 @@ BE THERE
 
 
   const downloadHTML = () => {
-    const htmlContent = generateNewsletterHTML(markdown, title, writtenBy, template);
+    const htmlContent = generateNewsletterHTML(markdown, subject, author, template);
     const blob = new Blob([htmlContent], { type: "text/html" });
     const url = URL.createObjectURL(blob);
 
@@ -101,7 +101,7 @@ BE THERE
   };
 
   const copyHTMLToClipboard = async () => {
-    const htmlContent = generateNewsletterHTML(markdown, title, writtenBy, template);
+    const htmlContent = generateNewsletterHTML(markdown, subject, author, template);
     try {
       await navigator.clipboard.writeText(htmlContent);
       alert("HTML copied to clipboard! 🚀");
@@ -120,26 +120,26 @@ BE THERE
           backgroundColor: "#f8fafc",
         }}
       >
-      <select onChange={(e) => setTemplate(e.target.value)} value={template}>
+      {/*<select onChange={(e) => setTemplate(e.target.value)} value={template}>
         <option value="fotosoc">DCU Fotosoc</option>
         <option value="mps">DCU MPS</option>
         <option value="redbrick">Redbrick</option>
-      </select>
+      </select>*/}
 
         <div style={{ marginBottom: "16px" }}>
-          <label>Title</label>
+          <label>Subject</label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
             style={{ width: "100%", padding: "8px", marginBottom: "16px" }}
           />
 
-          <label>Written By</label>
+          <label>Author</label>
           <input
             type="text"
-            value={writtenBy}
-            onChange={(e) => setWrittenBy(e.target.value)}
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
             style={{ width: "100%", padding: "8px", marginBottom: "16px" }}
           />
 
@@ -372,7 +372,7 @@ BE THERE
       >
         <iframe
           title="Newsletter Preview"
-          srcDoc={generateNewsletterHTML(markdown, title, writtenBy, template)}
+          srcDoc={generateNewsletterHTML(markdown, subject, author, template)}
           style={{
             width: "100%",
             height: "90vh",

@@ -16,12 +16,10 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>DCU Fotosoc Newsletter</title>
+      <title>${title}</title>
       <style>
         .user-content img {
-          width: 300px;
-          height: 300px;
-          object-fit: cover;
+          height: 350px;
           border-radius: 8px;
           display: block;
           margin: 16px auto;
@@ -59,7 +57,7 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
             </table>
 
             <!-- Weekly Recap Section -->
-            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; padding: 8px; margin-bottom: 24px;">
               <tr>
                 <td style="padding: 16px; text-align: center;">
                   ${styledContent}
@@ -71,8 +69,8 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
             <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: white; border-radius: 8px; margin-bottom: 24px;">
               <tr>
                 <td style="padding: 16px; text-align: center;">
-                  <p style="font-size: 16px; color: #000000; margin: 0 0 8px;">
-                    ${writtenBy}
+                  <p style="font-size: 16px; color: #000000; margin:4px;">
+                    <b>${writtenBy}</b>
                   </p> 
                 </td>
               </tr>
@@ -82,7 +80,7 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
             <table width="600" cellpadding="0" cellspacing="0" border="0"
               style="background-color: white; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
               <tr>
-                <td style="padding: 16px; text-align: center;">
+                <td style="padding: 8px; text-align: center;">
                   <h3
                     style="font-size: 18px; font-weight: bold; color: #1e40af; margin: 0 0 16px;">Check
                     Out Our Socials!</h3>
@@ -93,35 +91,35 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
                         <a href="https://chat.whatsapp.com/KcWm0mU78nyHKMibl3Vlko"
                           target="_blank" style="text-decoration: none;">
                           <img src="https://i.imgur.com/zzymrYn.png" alt="WhatsApp"
-                            style="width: 48px; height: 48px;">
+                            style="height: 48px;">
                         </a>
                       </td>
                       <td style="padding: 8px;">
                         <a href="https://www.tiktok.com/@dcufotosoc"
                           target="_blank" style="text-decoration: none;">
                           <img src="https://i.imgur.com/D5mnYPb.png" alt="TikTok"
-                            style="width: 48px; height: 48px;">
+                            style="height: 48px;">
                         </a>
                       </td>
                       <td style="padding: 8px;">
                         <a href="https://instagram.com/dcufotosoc" target="_blank"
                           style="text-decoration: none;">
                           <img src="https://i.imgur.com/w7DUF2P.png" alt="Instagram"
-                            style="width: 48px; height: 48px;">
+                            style="height: 48px;">
                         </a>
                       </td>
                       <td style="padding: 8px;">
                         <a href="mailto:committee@dcufotosoc.ie" target="_blank"
                           style="text-decoration: none;">
                           <img src="https://i.imgur.com/ssNBtrm.png" alt="Email"
-                            style="width: 48px; height: 48px;">
+                            style="height: 48px;">
                         </a>
                       </td>
                       <td style="padding: 8px;">
                         <a href="https://dcufotosoc.ie" target="_blank"
                           style="text-decoration: none;">
                           <img src="https://i.imgur.com/XCberko.png" alt="Website"
-                            style="width: 48px; height: 48px;">
+                            style="height: 48px;">
                         </a>
                       </td>
                     </tr>
@@ -183,7 +181,7 @@ const generateNewsletterHTML = (markdown, title, writtenBy, template) => {
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width  initial-scale=1">
-        <title>Last email :(</title>
+        <title>${title}</title>
 
     <style type="text/css">
     .user-content img {
