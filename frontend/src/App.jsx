@@ -27,7 +27,7 @@ async function imageUploadHandler(image) {
   const formData = new FormData();
   formData.append("image", image);
 
-  const response = await fetch("http://127.0.0.1:3001/upload-image", {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/upload-image`, {
     method: "POST",
     body: formData,
   });
@@ -192,7 +192,7 @@ BE THERE
 
               try {
                 const response = await fetch(
-                  "http://127.0.0.1:3001/upload-csv",
+                  `${import.meta.env.VITE_API_URL}/upload-csv`,
                   {
                     method: "POST",
                     body: formData,
@@ -276,7 +276,7 @@ BE THERE
               setSendingStatus("Sending...");
               try {
                 const response = await fetch(
-                  "http://127.0.0.1:3001/send-emails",
+                  `${import.meta.env.VITE_API_URL}/send-emails`,
                   {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

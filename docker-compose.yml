@@ -1,0 +1,32 @@
+services:
+  fotosoc-newsletter-generator-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fotosoc-newsletter-generator-backend
+    hostname: fotosoc-newsletter-generator-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - SEND_PASSWORD=$SEND_PASSWORD
+      - SMTP_SERVER=$SMTP_SERVER
+      - SMTP_PORT=$SMTP_PORT
+      - SMTP_USERNAME=$SMTP_USERNAME
+      - SMTP_PASSWORD=$SMTP_PASSWORD
+      - SMTP_SECURE=$SMTP_SECURE
+      - IMGUR_CLIENT_ID=$IMGUR_CLIENT_ID
+
+  fotosoc-newsletter-generator-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=$VITE_API_URL
+    container_name: fotosoc-newsletter-generator-frontend
+    hostname: fotosoc-newsletter-generator-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=$VITE_API_URL
+    depends_on:
+      - fotosoc-newsletter-generator-backend
