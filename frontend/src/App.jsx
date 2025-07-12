@@ -21,7 +21,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 
-import generateNewsletterHTML from "./components/generateNewsletterHTML";
+import generateNewsletterHTML from "./generateNewsletterHTML";
 
 async function imageUploadHandler(image) {
   const formData = new FormData();
