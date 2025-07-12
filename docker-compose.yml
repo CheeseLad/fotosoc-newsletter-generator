@@ -23,11 +23,13 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=$VITE_API_URL
+        - VITE_LISTMONK_MODE=$VITE_LISTMONK_MODE
     container_name: fotosoc-newsletter-generator-frontend
     hostname: fotosoc-newsletter-generator-frontend
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=$VITE_API_URL
+      - VITE_LISTMONK_MODE=$VITE_LISTMONK_MODE
     depends_on:
       - fotosoc-newsletter-generator-backend

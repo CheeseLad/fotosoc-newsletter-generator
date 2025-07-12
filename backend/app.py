@@ -6,11 +6,16 @@ import smtplib
 from email.mime.text import MIMEText
 import requests
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 SEND_PASSWORD = os.getenv('SEND_PASSWORD')
 
@@ -20,7 +25,7 @@ SMTP_USERNAME = os.getenv('SMTP_USERNAME')
 SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 SMTP_SECURE = os.getenv('SMTP_SECURE') == 'true'
 
-APP_PORT = int(os.getenv('APP_PORT') or 3001)
+APP_PORT = int(os.getenv('APP_PORT', '3001'))
 
 IMGUR_CLIENT_ID = os.getenv('IMGUR_CLIENT_ID')
 
@@ -125,6 +130,10 @@ def upload_image():
     json_response = response.json()
     return jsonify({'link': json_response['data']['link'], 'success': True})
 
+@app.route('/', methods=['GET'])
+def index():
+    logger.info(f"GET request received from {request.remote_addr}")
+    return jsonify({"message": "Welcome to the DCU Fotosoc Newsletter API"}), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=APP_PORT, debug=True)
+    app.run(host='0.0.0.0', port=APP_PORT, debug=False)

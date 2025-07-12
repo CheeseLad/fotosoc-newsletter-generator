@@ -31,10 +31,17 @@ ENV IMGUR_CLIENT_ID=$IMGUR_CLIENT_ID
 ARG APP_PORT
 ENV APP_PORT=$APP_PORT
 
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir uv
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --system --no-cache-dir -r requirements.txt
+
+# Create a non-root user for security
+RUN adduser --disabled-password --gecos '' appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
 
 EXPOSE 3001
 
-CMD ["python", "app.py"]
+# Use Gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:3001", "--workers", "4", "--timeout", "120", "app:app"]
