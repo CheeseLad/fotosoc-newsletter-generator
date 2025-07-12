@@ -59,6 +59,7 @@ jobs:
           labels: ${{ steps['meta-frontend'].outputs.labels }}
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_LISTMONK_MODE=${{ secrets.VITE_LISTMONK_MODE }}
 
       - name: Build and push backend
         uses: docker/build-push-action@v5

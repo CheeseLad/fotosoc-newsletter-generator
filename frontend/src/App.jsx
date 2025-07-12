@@ -123,9 +123,9 @@ BE THERE
       <div
         style={{
           width: "50%",
-          padding: "24px",
+          padding: "12px",
           overflowY: "scroll",
-          backgroundColor: "#f8fafc",
+          backgroundColor: "white",
         }}
       >
         {/*<select onChange={(e) => setTemplate(e.target.value)} value={template}>
@@ -134,24 +134,24 @@ BE THERE
         <option value="redbrick">Redbrick</option>
       </select>*/}
 
-        <div style={{ marginBottom: "16px" }}>
-          <label>Subject</label>
+        <div style={{ marginBottom: "16px", display: "flex", flexDirection: "column", width: "100%" }}>
+          <label style={{ marginBottom: "4px" }}>Email Subject</label>
           <input
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginBottom: "16px" }}
+            style={{ width: "97%", padding: "12px", marginBottom: "16px", border: "1px solid #d1d5db", borderRadius: "8px", fontSize: "14px", outline: "none" }}
           />
 
-          <label>Author</label>
+          <label style={{ marginBottom: "4px" }}>Email Author</label>
           <input
             type="text"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginBottom: "16px" }}
+            style={{ width: "97%", padding: "12px", marginBottom: "16px", border: "1px solid #d1d5db", borderRadius: "8px", fontSize: "14px", outline: "none" }}
           />
 
-          <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
+          <div style={{ display: "flex", gap: "8px", width: "100%" }}>
             <button
               onClick={downloadHTML}
               style={{
@@ -162,6 +162,7 @@ BE THERE
                 padding: "12px",
                 borderRadius: "8px",
                 cursor: "pointer",
+                whiteSpace: "nowrap"
               }}
             >
               Download Email HTML
@@ -176,12 +177,15 @@ BE THERE
                 padding: "12px",
                 borderRadius: "8px",
                 cursor: "pointer",
+                whiteSpace: "nowrap"
               }}
             >
               Copy Email HTML to Clipboard
             </button>
           </div>
         </div>
+
+        {import.meta.env.VITE_LISTMONK_MODE === "false" && (
 
         <div style={{ marginBottom: "16px" }}>
           <label>
@@ -239,6 +243,7 @@ BE THERE
             </div>
           )}
         </div>
+        )}
 
         {emailList.length > 0 && (
           <div
@@ -264,6 +269,8 @@ BE THERE
             </ul>
           </div>
         )}
+
+        {import.meta.env.VITE_LISTMONK_MODE === "false" && (
 
         <div style={{ marginTop: "24px" }}>
           <label>Send Password</label>
@@ -342,8 +349,9 @@ BE THERE
             </div>
           )}
         </div>
+        )}
 
-        <div className="editor-content">
+        <div className="editor-content" style={{ border: "1px solid #d1d5db", borderRadius: "8px"}}>
           <MDXEditor
             markdown={markdown}
             onChange={handleMarkdownChange}
@@ -381,8 +389,7 @@ BE THERE
       <div
         style={{
           width: "50%",
-          padding: "24px",
-          backgroundColor: "#f1f5f9",
+          padding: "12px",
           overflowY: "hidden",
           overflowX: "hidden",
         }}
@@ -392,8 +399,9 @@ BE THERE
           srcDoc={generateNewsletterHTML(markdown, subject, author, template)}
           style={{
             width: "100%",
-            height: "90vh",
-            border: "1px solid #ccc",
+            height: "93vh",
+            border: "1px solid #d1d5db", 
+            borderRadius: "8px",
             backgroundColor: "white",
           }}
         />
