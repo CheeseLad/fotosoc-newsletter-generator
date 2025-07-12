@@ -36,17 +36,6 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 # Copy built application from build stage
 COPY --from=build /app/dist /var/www/html/
 
-# Use existing nginx user (already exists in nginx base image)
-
-# Set proper permissions for nginx cache directories and web content
-RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /var/www/html && \
-    chmod -R 755 /var/www/html && \
-    chmod 777 /var/run
-
-# Switch to nginx user
-USER nginx
-
 # Expose port
 EXPOSE 5173
 
